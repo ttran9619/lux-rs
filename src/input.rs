@@ -32,9 +32,6 @@ pub fn handle_mirror_click(
 }
 
 /// Hover highlight system — changes color of hovered rotatable mirrors.
-#[derive(Component)]
-pub struct HoverHighlight;
-
 pub fn handle_mirror_hover(
     windows: Query<&Window>,
     camera_query: Query<(&Camera, &GlobalTransform)>,
@@ -42,7 +39,7 @@ pub fn handle_mirror_hover(
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
     let cursor_pos = get_world_cursor_pos(&windows, &camera_query);
-    let hovered_cell = cursor_pos.and_then(|pos| grid::world_to_grid(pos));
+    let hovered_cell = cursor_pos.and_then(grid::world_to_grid);
 
     let rotatable_color = Color::srgb(0.2, 0.5, 1.0);
     let hover_color = Color::srgb(0.5, 0.75, 1.0);

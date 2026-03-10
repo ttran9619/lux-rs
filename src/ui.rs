@@ -82,12 +82,14 @@ pub fn handle_menu_buttons(
     }
 }
 
-pub fn update_menu_button_colors(
-    mut query: Query<
-        (&Interaction, &mut BackgroundColor),
-        (With<LevelButton>, Changed<Interaction>),
-    >,
-) {
+type MenuButtonColorQuery<'w, 's> = Query<
+    'w,
+    's,
+    (&'static Interaction, &'static mut BackgroundColor),
+    (With<LevelButton>, Changed<Interaction>),
+>;
+
+pub fn update_menu_button_colors(mut query: MenuButtonColorQuery) {
     for (interaction, mut bg) in query.iter_mut() {
         *bg = match interaction {
             Interaction::Pressed => BackgroundColor(Color::srgb(0.15, 0.15, 0.25)),

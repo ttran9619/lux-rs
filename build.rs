@@ -79,8 +79,8 @@ fn generate_levels_manifest() -> io::Result<()> {
         levels.push(value);
     }
 
-    let output = serde_json::to_string_pretty(&levels)
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
+    let output =
+        serde_json::to_string_pretty(&levels).map_err(|e| io::Error::other(e.to_string()))?;
 
     fs::write(output_file, format!("{output}\n"))?;
     Ok(())

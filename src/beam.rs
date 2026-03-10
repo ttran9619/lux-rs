@@ -58,18 +58,16 @@ pub fn trace_beam(
             .iter()
             .find(|(r, c, _)| *r == pos.row && *c == pos.col)
             .map(|(_, _, o)| *o)
+            && let Some(new_dir) = orientation.reflect(dir)
         {
-            if let Some(new_dir) = orientation.reflect(dir) {
-                // Reflection: end current segment, start a new one
-                let world = grid::grid_to_world(pos.row, pos.col);
-                segments.push(BeamSegment {
-                    start: segment_start,
-                    end: world,
-                });
-                segment_start = world;
-                dir = new_dir;
-            }
-            // If None (pass-through), continue in same direction
+            // Reflection: end current segment, start a new one
+            let world = grid::grid_to_world(pos.row, pos.col);
+            segments.push(BeamSegment {
+                start: segment_start,
+                end: world,
+            });
+            segment_start = world;
+            dir = new_dir;
         }
 
         // Step to next cell
@@ -107,8 +105,7 @@ pub fn update_beam(
     mirror_query: Query<(&Mirror, &MirrorOrientation)>,
     level_registry: Res<crate::level::LevelRegistry>,
     current_level: Res<crate::level::CurrentLevel>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
+    (mut meshes, mut materials): (ResMut<Assets<Mesh>>, ResMut<Assets<ColorMaterial>>),
     mut level_solved: ResMut<LevelSolved>,
 ) {
     // Despawn old beam lines

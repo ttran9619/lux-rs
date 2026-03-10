@@ -30,11 +30,11 @@ pub fn world_to_grid(world_pos: Vec2) -> Option<(i32, i32)> {
     let col = (local_x / CELL_TOTAL).floor() as i32;
     let row = (local_y / CELL_TOTAL).floor() as i32;
 
-    if row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE {
+    if (0..GRID_SIZE).contains(&row) && (0..GRID_SIZE).contains(&col) {
         // Check we're inside the cell, not in the gap
         let cell_x = local_x - col as f32 * CELL_TOTAL;
         let cell_y = local_y - row as f32 * CELL_TOTAL;
-        if cell_x >= 0.0 && cell_x <= CELL_SIZE && cell_y >= 0.0 && cell_y <= CELL_SIZE {
+        if (0.0..=CELL_SIZE).contains(&cell_x) && (0.0..=CELL_SIZE).contains(&cell_y) {
             return Some((row, col));
         }
     }
@@ -173,7 +173,3 @@ pub fn spawn_level_entities(
         ));
     }
 }
-
-/// Tag for all entities that should be cleaned up when leaving a level.
-#[derive(Component)]
-pub struct LevelEntity;
