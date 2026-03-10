@@ -6,6 +6,7 @@ mod mirror;
 mod types;
 mod ui;
 
+use bevy::asset::AssetMetaCheck;
 use bevy::prelude::*;
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Hash, States)]
@@ -18,21 +19,34 @@ pub enum AppState {
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
-                title: "Reflection Puzzler".to_string(),
-                resolution: bevy::window::WindowResolution::new(800.0, 700.0),
-                ..default()
-            }),
-            ..default()
-        }))
+        .add_plugins(
+            DefaultPlugins
+                .set(WindowPlugin {
+                    primary_window: Some(Window {
+                        title: "Reflection Puzzler".to_string(),
+                        resolution: bevy::window::WindowResolution::new(800.0, 700.0),
+                        ..default()
+                    }),
+                    ..default()
+                })
+                .set(AssetPlugin {
+                    meta_check: AssetMetaCheck::Never,
+                    ..default()
+                }),
+        )
         .init_state::<AppState>()
         .init_resource::<beam::LevelSolved>()
         .init_resource::<level::LevelRegistry>()
+        .init_asset::<level::LevelManifest>()
+        .init_asset_loader::<level::LevelManifestLoader>()
         // Startup: spawn camera
         .add_systems(Startup, spawn_camera)
-        // Loading state: load levels then transition to menu
-        .add_systems(OnEnter(AppState::Loading), level::load_levels)
+        // Loading state: async load levels manifest
+        .add_systems(OnEnter(AppState::Loading), level::start_loading)
+        .add_systems(
+            Update,
+            level::check_loading_complete.run_if(in_state(AppState::Loading)),
+        )
         // Menu state
         .add_systems(OnEnter(AppState::Menu), ui::spawn_menu)
         .add_systems(OnExit(AppState::Menu), ui::despawn_menu)

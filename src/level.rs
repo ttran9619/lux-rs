@@ -1,3 +1,6 @@
+use bevy::asset::io::Reader;
+use bevy::asset::{AssetLoader, LoadContext};
+use bevy::prelude::*;
 use serde::Deserialize;
 
 use crate::mirror::MirrorOrientation;
@@ -33,7 +36,41 @@ pub struct LevelData {
     pub mirrors: Vec<MirrorData>,
 }
 
-use bevy::prelude::*;
+// ─── Bevy Asset: LevelManifest ──────────────────────────────
+
+/// A Bevy asset containing all levels, loaded from a single JSON array file.
+#[derive(Asset, TypePath, Debug)]
+pub struct LevelManifest {
+    pub levels: Vec<LevelData>,
+}
+
+/// Loader that deserializes a JSON array of levels into a LevelManifest.
+#[derive(Default)]
+pub struct LevelManifestLoader;
+
+impl AssetLoader for LevelManifestLoader {
+    type Asset = LevelManifest;
+    type Settings = ();
+    type Error = Box<dyn std::error::Error + Send + Sync>;
+
+    async fn load(
+        &self,
+        reader: &mut dyn Reader,
+        _settings: &Self::Settings,
+        _load_context: &mut LoadContext<'_>,
+    ) -> Result<Self::Asset, Self::Error> {
+        let mut bytes = Vec::new();
+        reader.read_to_end(&mut bytes).await?;
+        let levels: Vec<LevelData> = serde_json::from_slice(&bytes)?;
+        Ok(LevelManifest { levels })
+    }
+
+    fn extensions(&self) -> &[&str] {
+        &["json"]
+    }
+}
+
+// ─── Resources ──────────────────────────────────────────────
 
 /// Resource holding all available levels.
 #[derive(Resource, Default)]
@@ -45,39 +82,36 @@ pub struct LevelRegistry {
 #[derive(Resource)]
 pub struct CurrentLevel(pub usize);
 
-/// Loads all level JSON files from the assets/levels/ directory.
-pub fn load_levels(
+/// Resource holding the handle to the manifest asset while it loads.
+#[derive(Resource)]
+pub struct ManifestHandle(pub Handle<LevelManifest>);
+
+// ─── Systems ────────────────────────────────────────────────
+
+/// Kicks off async loading of the level manifest.
+pub fn start_loading(mut commands: Commands, asset_server: Res<AssetServer>) {
+    let handle = asset_server.load::<LevelManifest>("levels.json");
+    commands.insert_resource(ManifestHandle(handle));
+}
+
+/// Polls each frame until the manifest is loaded, then populates LevelRegistry.
+pub fn check_loading_complete(
+    mut commands: Commands,
+    manifest_handle: Option<Res<ManifestHandle>>,
+    mut manifests: ResMut<Assets<LevelManifest>>,
     mut registry: ResMut<LevelRegistry>,
     mut next_state: ResMut<NextState<crate::AppState>>,
 ) {
-    let levels_dir = std::path::Path::new("assets/levels");
-    let mut levels = Vec::new();
+    let Some(handle_res) = manifest_handle else {
+        return;
+    };
 
-    if let Ok(entries) = std::fs::read_dir(levels_dir) {
-        let mut paths: Vec<_> = entries.filter_map(|e| e.ok()).map(|e| e.path()).collect();
-        paths.sort();
-
-        for path in paths {
-            if path.extension().and_then(|s| s.to_str()) == Some("json") {
-                match std::fs::read_to_string(&path) {
-                    Ok(contents) => match serde_json::from_str::<LevelData>(&contents) {
-                        Ok(level) => {
-                            info!("Loaded level: {} from {:?}", level.name, path);
-                            levels.push(level);
-                        }
-                        Err(e) => warn!("Failed to parse {:?}: {}", path, e),
-                    },
-                    Err(e) => warn!("Failed to read {:?}: {}", path, e),
-                }
-            }
-        }
-    } else {
-        warn!("Could not read assets/levels/ directory");
+    if let Some(manifest) = manifests.remove(handle_res.0.id()) {
+        info!("Loaded {} levels from manifest", manifest.levels.len());
+        registry.levels = manifest.levels;
+        commands.remove_resource::<ManifestHandle>();
+        next_state.set(crate::AppState::Menu);
     }
-
-    info!("Loaded {} levels", levels.len());
-    registry.levels = levels;
-    next_state.set(crate::AppState::Menu);
 }
 
 #[cfg(test)]
@@ -114,5 +148,31 @@ mod tests {
         assert!(level.mirrors[1].fixed);
         assert_eq!(level.mirrors[2].orientation, MirrorOrientation::Horizontal);
         assert!(!level.mirrors[2].fixed); // default
+    }
+
+    #[test]
+    fn test_deserialize_manifest() {
+        let json = r#"[
+            {
+                "name": "Level One",
+                "source": { "row": 0, "col": 0, "direction": "right" },
+                "target": { "row": 0, "col": 7 },
+                "mirrors": []
+            },
+            {
+                "name": "Level Two",
+                "source": { "row": 3, "col": 0, "direction": "down" },
+                "target": { "row": 7, "col": 3 },
+                "mirrors": [
+                    { "row": 5, "col": 0, "orientation": "\\", "fixed": true }
+                ]
+            }
+        ]"#;
+
+        let levels: Vec<LevelData> = serde_json::from_str(json).unwrap();
+        assert_eq!(levels.len(), 2);
+        assert_eq!(levels[0].name, "Level One");
+        assert_eq!(levels[1].name, "Level Two");
+        assert_eq!(levels[1].mirrors.len(), 1);
     }
 }
