@@ -1,0 +1,20 @@
+{
+    "name": "First Reflection",
+    "source": {
+        "row": 3,
+        "col": 0,
+        "direction": "right"
+    },
+    "target": {
+        "row": 0,
+        "col": 3
+    },
+    "mirrors": [
+        {
+            "row": 3,
+            "col": 3,
+            "orientation": "\\",
+            "fixed": false
+        }
+    ]
+}
