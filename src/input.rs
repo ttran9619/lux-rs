@@ -75,5 +75,7 @@ fn get_world_cursor_pos(
     let window = windows.single().ok()?;
     let cursor_pos = window.cursor_position()?;
     let (camera, camera_transform) = camera_query.single().ok()?;
-    camera.viewport_to_world_2d(camera_transform, cursor_pos).ok()
+    camera
+        .viewport_to_world_2d(camera_transform, cursor_pos)
+        .ok()
 }

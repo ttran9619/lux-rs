@@ -160,8 +160,9 @@ pub fn spawn_level_entities(
         commands.spawn((
             Mesh2d(mirror_mesh),
             MeshMaterial2d(material),
-            Transform::from_xyz(pos.x, pos.y, 3.0)
-                .with_rotation(Quat::from_rotation_z(mirror_data.orientation.rotation_radians())),
+            Transform::from_xyz(pos.x, pos.y, 3.0).with_rotation(Quat::from_rotation_z(
+                mirror_data.orientation.rotation_radians(),
+            )),
             Mirror {
                 row: mirror_data.row,
                 col: mirror_data.col,
