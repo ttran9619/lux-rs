@@ -89,12 +89,31 @@ pub struct ManifestHandle(pub Handle<LevelManifest>);
 // ─── Systems ────────────────────────────────────────────────
 
 /// Kicks off async loading of the level manifest.
+#[cfg(target_arch = "wasm32")]
+pub fn start_loading(
+    mut registry: ResMut<LevelRegistry>,
+    mut next_state: ResMut<NextState<crate::AppState>>,
+) {
+    let levels: Vec<LevelData> = serde_json::from_str(include_str!("../assets/levels.json"))
+        .expect("embedded levels.json must be valid");
+    bevy::log::info!("Loaded {} embedded levels for wasm", levels.len());
+    registry.levels = levels;
+    next_state.set(crate::AppState::Menu);
+}
+
+/// Kicks off async loading of the level manifest.
+#[cfg(not(target_arch = "wasm32"))]
 pub fn start_loading(mut commands: Commands, asset_server: Res<AssetServer>) {
     let handle = asset_server.load::<LevelManifest>("levels.json");
     commands.insert_resource(ManifestHandle(handle));
 }
 
 /// Polls each frame until the manifest is loaded, then populates LevelRegistry.
+#[cfg(target_arch = "wasm32")]
+pub fn check_loading_complete() {}
+
+/// Polls each frame until the manifest is loaded, then populates LevelRegistry.
+#[cfg(not(target_arch = "wasm32"))]
 pub fn check_loading_complete(
     mut commands: Commands,
     manifest_handle: Option<Res<ManifestHandle>>,
@@ -107,7 +126,7 @@ pub fn check_loading_complete(
     };
 
     if let Some(manifest) = manifests.remove(handle_res.0.id()) {
-        info!("Loaded {} levels from manifest", manifest.levels.len());
+        bevy::log::info!("Loaded {} levels from manifest", manifest.levels.len());
         registry.levels = manifest.levels;
         commands.remove_resource::<ManifestHandle>();
         next_state.set(crate::AppState::Menu);
