@@ -1,0 +1,6 @@
+[alias]
+build-native = "build"
+run-native = "run"
+test-native = "test"
+build-wasm = "build --target wasm32-unknown-unknown"
+test-wasm = "test --target wasm32-unknown-unknown --no-run"
