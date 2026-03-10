@@ -1,0 +1,26 @@
+{
+    "name": "Two Bounces",
+    "source": {
+        "row": 0,
+        "col": 0,
+        "direction": "right"
+    },
+    "target": {
+        "row": 5,
+        "col": 7
+    },
+    "mirrors": [
+        {
+            "row": 0,
+            "col": 4,
+            "orientation": "\\",
+            "fixed": true
+        },
+        {
+            "row": 5,
+            "col": 4,
+            "orientation": "/",
+            "fixed": false
+        }
+    ]
+}
