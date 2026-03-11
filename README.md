@@ -1,4 +1,4 @@
-# Reflection Puzzler
+# Lux
 
 A small puzzle game built with Bevy where you rotate mirrors to guide a light beam from the source to the target.
 

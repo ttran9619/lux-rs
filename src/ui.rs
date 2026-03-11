@@ -30,7 +30,7 @@ pub fn spawn_menu(mut commands: Commands, level_registry: Res<LevelRegistry>) {
         .with_children(|parent| {
             // Title
             parent.spawn((
-                Text::new("Reflection Puzzler"),
+                Text::new("Lux"),
                 TextFont {
                     font_size: 48.0,
                     ..default()

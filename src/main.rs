@@ -23,7 +23,7 @@ fn main() {
             DefaultPlugins
                 .set(WindowPlugin {
                     primary_window: Some(Window {
-                        title: "Reflection Puzzler".to_string(),
+                        title: "Lux".to_string(),
                         resolution: bevy::window::WindowResolution::new(800.0, 700.0),
                         ..default()
                     }),
