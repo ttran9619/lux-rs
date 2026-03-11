@@ -1,0 +1,32 @@
+{
+    "name": "Cross Current",
+    "source": {
+        "row": 3,
+        "col": 0,
+        "direction": "right"
+    },
+    "target": {
+        "row": 0,
+        "col": 7
+    },
+    "mirrors": [
+        {
+            "row": 3,
+            "col": 2,
+            "orientation": "|",
+            "fixed": false
+        },
+        {
+            "row": 3,
+            "col": 5,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 0,
+            "col": 5,
+            "orientation": "\\",
+            "fixed": false
+        }
+    ]
+}

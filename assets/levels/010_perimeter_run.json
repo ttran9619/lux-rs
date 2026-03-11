@@ -1,0 +1,38 @@
+{
+    "name": "Perimeter Run",
+    "source": {
+        "row": 1,
+        "col": 0,
+        "direction": "right"
+    },
+    "target": {
+        "row": 6,
+        "col": 7
+    },
+    "mirrors": [
+        {
+            "row": 1,
+            "col": 2,
+            "orientation": "-",
+            "fixed": true
+        },
+        {
+            "row": 1,
+            "col": 4,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 4,
+            "col": 4,
+            "orientation": "|",
+            "fixed": true
+        },
+        {
+            "row": 6,
+            "col": 4,
+            "orientation": "/",
+            "fixed": false
+        }
+    ]
+}

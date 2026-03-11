@@ -1,0 +1,32 @@
+{
+    "name": "Corner Switch",
+    "source": {
+        "row": 7,
+        "col": 0,
+        "direction": "up"
+    },
+    "target": {
+        "row": 0,
+        "col": 7
+    },
+    "mirrors": [
+        {
+            "row": 4,
+            "col": 0,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 4,
+            "col": 7,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 2,
+            "col": 7,
+            "orientation": "|",
+            "fixed": true
+        }
+    ]
+}

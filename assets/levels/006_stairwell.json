@@ -1,0 +1,44 @@
+{
+    "name": "Stairwell",
+    "source": {
+        "row": 0,
+        "col": 0,
+        "direction": "right"
+    },
+    "target": {
+        "row": 1,
+        "col": 0
+    },
+    "mirrors": [
+        {
+            "row": 0,
+            "col": 2,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 2,
+            "col": 2,
+            "orientation": "|",
+            "fixed": true
+        },
+        {
+            "row": 4,
+            "col": 2,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 4,
+            "col": 0,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 6,
+            "col": 6,
+            "orientation": "-",
+            "fixed": true
+        }
+    ]
+}

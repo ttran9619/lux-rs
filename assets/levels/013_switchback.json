@@ -1,0 +1,44 @@
+{
+    "name": "Switchback",
+    "source": {
+        "row": 6,
+        "col": 0,
+        "direction": "right"
+    },
+    "target": {
+        "row": 5,
+        "col": 1
+    },
+    "mirrors": [
+        {
+            "row": 6,
+            "col": 5,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 4,
+            "col": 5,
+            "orientation": "|",
+            "fixed": true
+        },
+        {
+            "row": 2,
+            "col": 5,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 2,
+            "col": 3,
+            "orientation": "-",
+            "fixed": true
+        },
+        {
+            "row": 2,
+            "col": 1,
+            "orientation": "\\",
+            "fixed": false
+        }
+    ]
+}

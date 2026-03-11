@@ -1,0 +1,50 @@
+{
+    "name": "Center Fold",
+    "source": {
+        "row": 7,
+        "col": 3,
+        "direction": "up"
+    },
+    "target": {
+        "row": 0,
+        "col": 6
+    },
+    "mirrors": [
+        {
+            "row": 5,
+            "col": 3,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 5,
+            "col": 0,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 4,
+            "col": 0,
+            "orientation": "|",
+            "fixed": true
+        },
+        {
+            "row": 2,
+            "col": 0,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 2,
+            "col": 3,
+            "orientation": "-",
+            "fixed": true
+        },
+        {
+            "row": 2,
+            "col": 6,
+            "orientation": "\\",
+            "fixed": false
+        }
+    ]
+}

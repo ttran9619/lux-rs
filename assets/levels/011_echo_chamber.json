@@ -1,0 +1,44 @@
+{
+    "name": "Echo Chamber",
+    "source": {
+        "row": 7,
+        "col": 6,
+        "direction": "up"
+    },
+    "target": {
+        "row": 7,
+        "col": 0
+    },
+    "mirrors": [
+        {
+            "row": 5,
+            "col": 6,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 5,
+            "col": 4,
+            "orientation": "-",
+            "fixed": true
+        },
+        {
+            "row": 5,
+            "col": 2,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 6,
+            "col": 2,
+            "orientation": "|",
+            "fixed": true
+        },
+        {
+            "row": 7,
+            "col": 2,
+            "orientation": "\\",
+            "fixed": false
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+{
+    "name": "Split Horizon",
+    "source": {
+        "row": 7,
+        "col": 7,
+        "direction": "up"
+    },
+    "target": {
+        "row": 1,
+        "col": 1
+    },
+    "mirrors": [
+        {
+            "row": 5,
+            "col": 7,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 5,
+            "col": 4,
+            "orientation": "-",
+            "fixed": true
+        },
+        {
+            "row": 5,
+            "col": 1,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 3,
+            "col": 1,
+            "orientation": "|",
+            "fixed": true
+        }
+    ]
+}

@@ -1,0 +1,50 @@
+{
+    "name": "False Floor",
+    "source": {
+        "row": 2,
+        "col": 0,
+        "direction": "right"
+    },
+    "target": {
+        "row": 4,
+        "col": 7
+    },
+    "mirrors": [
+        {
+            "row": 2,
+            "col": 2,
+            "orientation": "-",
+            "fixed": true
+        },
+        {
+            "row": 2,
+            "col": 5,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 6,
+            "col": 5,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 6,
+            "col": 1,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 4,
+            "col": 1,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 3,
+            "col": 5,
+            "orientation": "-",
+            "fixed": false
+        }
+    ]
+}

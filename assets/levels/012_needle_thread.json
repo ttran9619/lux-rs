@@ -1,0 +1,50 @@
+{
+    "name": "Needle Thread",
+    "source": {
+        "row": 0,
+        "col": 1,
+        "direction": "down"
+    },
+    "target": {
+        "row": 4,
+        "col": 6
+    },
+    "mirrors": [
+        {
+            "row": 3,
+            "col": 1,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 3,
+            "col": 4,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 5,
+            "col": 4,
+            "orientation": "|",
+            "fixed": true
+        },
+        {
+            "row": 6,
+            "col": 4,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 6,
+            "col": 2,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 4,
+            "col": 2,
+            "orientation": "\\",
+            "fixed": false
+        }
+    ]
+}

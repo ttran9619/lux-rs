@@ -1,0 +1,44 @@
+{
+    "name": "Locked Corridor",
+    "source": {
+        "row": 0,
+        "col": 1,
+        "direction": "down"
+    },
+    "target": {
+        "row": 2,
+        "col": 6
+    },
+    "mirrors": [
+        {
+            "row": 3,
+            "col": 1,
+            "orientation": "|",
+            "fixed": true
+        },
+        {
+            "row": 5,
+            "col": 1,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 5,
+            "col": 4,
+            "orientation": "-",
+            "fixed": true
+        },
+        {
+            "row": 5,
+            "col": 6,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 3,
+            "col": 6,
+            "orientation": "|",
+            "fixed": true
+        }
+    ]
+}

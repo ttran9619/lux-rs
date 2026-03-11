@@ -1,0 +1,44 @@
+{
+    "name": "Double Back",
+    "source": {
+        "row": 7,
+        "col": 7,
+        "direction": "left"
+    },
+    "target": {
+        "row": 0,
+        "col": 6
+    },
+    "mirrors": [
+        {
+            "row": 7,
+            "col": 5,
+            "orientation": "-",
+            "fixed": true
+        },
+        {
+            "row": 7,
+            "col": 3,
+            "orientation": "/",
+            "fixed": false
+        },
+        {
+            "row": 2,
+            "col": 3,
+            "orientation": "-",
+            "fixed": false
+        },
+        {
+            "row": 0,
+            "col": 3,
+            "orientation": "\\",
+            "fixed": false
+        },
+        {
+            "row": 0,
+            "col": 5,
+            "orientation": "-",
+            "fixed": true
+        }
+    ]
+}
