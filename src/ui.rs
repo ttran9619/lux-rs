@@ -1,3 +1,4 @@
+use bevy::input::mouse::{MouseScrollUnit, MouseWheel};
 use bevy::prelude::*;
 
 use crate::AppState;
@@ -11,6 +12,9 @@ pub struct MenuRoot;
 
 #[derive(Component)]
 pub struct LevelButton(pub usize);
+
+#[derive(Component)]
+pub struct MenuLevelList;
 
 pub fn spawn_menu(mut commands: Commands, level_registry: Res<LevelRegistry>) {
     commands
@@ -42,31 +46,97 @@ pub fn spawn_menu(mut commands: Commands, level_registry: Res<LevelRegistry>) {
                 },
             ));
 
-            // Level buttons
-            for (i, level) in level_registry.levels.iter().enumerate() {
-                parent
-                    .spawn((
-                        Button,
-                        Node {
-                            width: Val::Px(300.0),
-                            height: Val::Px(50.0),
-                            justify_content: JustifyContent::Center,
-                            align_items: AlignItems::Center,
-                            ..default()
-                        },
-                        BackgroundColor(Color::srgb(0.25, 0.25, 0.35)),
-                        LevelButton(i),
-                    ))
-                    .with_child((
-                        Text::new(format!("{}. {}", i + 1, level.name)),
-                        TextFont {
-                            font_size: 22.0,
-                            ..default()
-                        },
-                        TextColor(Color::WHITE),
-                    ));
-            }
+            parent.spawn((
+                Text::new("Scroll to see all levels"),
+                TextFont {
+                    font_size: 16.0,
+                    ..default()
+                },
+                TextColor(Color::srgb(0.8, 0.82, 0.9)),
+                Node {
+                    margin: UiRect::bottom(Val::Px(6.0)),
+                    ..default()
+                },
+            ));
+
+            // Scrollable level list to avoid clipping on short screens.
+            parent
+                .spawn((
+                    Node {
+                        width: Val::Px(340.0),
+                        max_height: Val::Percent(65.0),
+                        flex_direction: FlexDirection::Column,
+                        align_items: AlignItems::Center,
+                        row_gap: Val::Px(10.0),
+                        padding: UiRect::all(Val::Px(6.0)),
+                        border: UiRect::all(Val::Px(1.0)),
+                        overflow: Overflow::scroll_y(),
+                        ..default()
+                    },
+                    BackgroundColor(Color::srgb(0.14, 0.14, 0.2)),
+                    BorderColor(Color::srgb(0.35, 0.35, 0.45)),
+                    ScrollPosition::default(),
+                    MenuLevelList,
+                ))
+                .with_children(|list| {
+                    for (i, level) in level_registry.levels.iter().enumerate() {
+                        list.spawn((
+                            Button,
+                            Node {
+                                width: Val::Px(300.0),
+                                height: Val::Px(50.0),
+                                justify_content: JustifyContent::Center,
+                                align_items: AlignItems::Center,
+                                ..default()
+                            },
+                            BackgroundColor(Color::srgb(0.25, 0.25, 0.35)),
+                            LevelButton(i),
+                        ))
+                        .with_child((
+                            Text::new(format!("{}. {}", i + 1, level.name)),
+                            TextFont {
+                                font_size: 22.0,
+                                ..default()
+                            },
+                            TextColor(Color::WHITE),
+                        ));
+                    }
+                });
+
+            parent.spawn((
+                Text::new("Use mouse wheel or touchpad"),
+                TextFont {
+                    font_size: 14.0,
+                    ..default()
+                },
+                TextColor(Color::srgb(0.72, 0.74, 0.82)),
+                Node {
+                    margin: UiRect::top(Val::Px(8.0)),
+                    ..default()
+                },
+            ));
         });
+}
+
+pub fn scroll_menu_level_list(
+    mut mouse_wheel_events: EventReader<MouseWheel>,
+    mut level_list_query: Query<&mut ScrollPosition, With<MenuLevelList>>,
+) {
+    let Ok(mut scroll_pos) = level_list_query.single_mut() else {
+        return;
+    };
+
+    let mut delta_y = 0.0;
+    for event in mouse_wheel_events.read() {
+        delta_y += match event.unit {
+            MouseScrollUnit::Line => event.y * 32.0,
+            MouseScrollUnit::Pixel => event.y,
+        };
+    }
+
+    if delta_y != 0.0 {
+        scroll_pos.offset_y = (scroll_pos.offset_y - delta_y).max(0.0);
+    }
 }
 
 pub fn handle_menu_buttons(

@@ -52,7 +52,11 @@ fn main() {
         .add_systems(OnExit(AppState::Menu), ui::despawn_menu)
         .add_systems(
             Update,
-            (ui::handle_menu_buttons, ui::update_menu_button_colors)
+            (
+                ui::handle_menu_buttons,
+                ui::update_menu_button_colors,
+                ui::scroll_menu_level_list,
+            )
                 .run_if(in_state(AppState::Menu)),
         )
         // Playing state
