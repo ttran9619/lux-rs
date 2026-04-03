@@ -19,18 +19,18 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            archive_name: reflection-puzzler-linux-x86_64.tar.gz
-            bin_name: reflection-puzzler
+            archive_name: lux-rs-linux-x86_64.tar.gz
+            bin_name: lux-rs
             bin_suffix: ""
           - os: macos-latest
             target: x86_64-apple-darwin
-            archive_name: reflection-puzzler-macos-x86_64.tar.gz
-            bin_name: reflection-puzzler
+            archive_name: lux-rs-macos-x86_64.tar.gz
+            bin_name: lux-rs
             bin_suffix: ""
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            archive_name: reflection-puzzler-windows-x86_64.zip
-            bin_name: reflection-puzzler
+            archive_name: lux-rs-windows-x86_64.zip
+            bin_name: lux-rs
             bin_suffix: .exe
 
     steps:
@@ -63,19 +63,19 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force -Path dist/reflection-puzzler | Out-Null
-          Copy-Item target/${{ matrix.target }}/release/${{ matrix.bin_name }}${{ matrix.bin_suffix }} dist/reflection-puzzler/
-          Copy-Item assets dist/reflection-puzzler/ -Recurse
-          Compress-Archive -Path dist/reflection-puzzler/* -DestinationPath dist/${{ matrix.archive_name }} -Force
+          New-Item -ItemType Directory -Force -Path dist/lux-rs | Out-Null
+          Copy-Item target/${{ matrix.target }}/release/${{ matrix.bin_name }}${{ matrix.bin_suffix }} dist/lux-rs/
+          Copy-Item assets dist/lux-rs/ -Recurse
+          Compress-Archive -Path dist/lux-rs/* -DestinationPath dist/${{ matrix.archive_name }} -Force
 
       - name: Create release archive (Unix)
         if: runner.os != 'Windows'
         shell: bash
         run: |
-          mkdir -p dist/reflection-puzzler
-          cp target/${{ matrix.target }}/release/${{ matrix.bin_name }} dist/reflection-puzzler/
-          cp -r assets dist/reflection-puzzler/
-          tar -czf dist/${{ matrix.archive_name }} -C dist reflection-puzzler
+          mkdir -p dist/lux-rs
+          cp target/${{ matrix.target }}/release/${{ matrix.bin_name }} dist/lux-rs/
+          cp -r assets dist/lux-rs/
+          tar -czf dist/${{ matrix.archive_name }} -C dist lux-rs
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
